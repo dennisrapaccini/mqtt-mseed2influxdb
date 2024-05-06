@@ -13,6 +13,7 @@ COPY requirements.txt /tmp/requirements.txt
 RUN pip install -r requirements.txt
 
 EXPOSE 8086
+#EXPOSE 3000
 
 CMD ["python", "src/proxy_unified.py"]
 

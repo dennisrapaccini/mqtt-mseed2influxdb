@@ -14,9 +14,26 @@ services:
       - "8086:8086"
     # security_opt:
     #   - no-new-privileges:true
+    environment: 
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${USER}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${BUCKET}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${TOKEN}
     volumes:
       - influxdb2-data:/var/lib/influxdb2
       - influxdb2-config:/etc/influxdb2
+    
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana-provisioning/:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
 
   proxy:
     container_name: mqtt-mseed2influxdb
@@ -35,3 +52,4 @@ services:
 volumes:
   influxdb2-data:
   influxdb2-config:
+  grafana-storage:
