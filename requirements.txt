@@ -1,0 +1,3 @@
+obspy
+paho-mqtt
+influxdb-client

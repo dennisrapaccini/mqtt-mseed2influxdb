@@ -1,26 +1,35 @@
-from obspy import Stream, Trace, read, UTCDateTime
-import time
-import sys
+from obspy import read, UTCDateTime
 import numpy as np
-import os
-import matplotlib.pyplot as plt
 import paho.mqtt.client as mqtt
 import ssl
 import configparser
-import asyncio
 import io 
 import logging 
-from influxdb_client import InfluxDBClient, Point, WritePrecision
+from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
+#import influxdb_client
+import os
+
 
 # Read the configuration file
 config_path = "config.ini"
 config = configparser.ConfigParser()
 config.read(config_path)
+print(config['influx2']['url'])
 
 # Create a new InfluxDB client
+
 influx_client = InfluxDBClient.from_config_file(config_path)
 logging.getLogger().setLevel(logging.INFO)
+
+# influx_client = influxdb_client.InfluxDBClient(
+#     url = "http://localhost:8086",
+#     token = "iANZ3cRM9aCTECpDH5IagsIR7xQhUlDzbwX-kCnVfS3lwK5VDPcdOuoAMkmRhGp7q3KwppNZynBjvXob1KweFQ==",
+#     org = "univpm"
+# )
+
+# Set up logging errors
+logging.basicConfig(filename='src/logs/errors.log', level=logging.ERROR)
 
 # Function to process MiniSEED files and write to InfluxDB
 def mseed2influxdb(data, axis, timens, sensor_id):
@@ -42,14 +51,14 @@ def mseed2influxdb(data, axis, timens, sensor_id):
     # Write the points to InfluxDB
     with influx_client.write_api(write_options=SYNCHRONOUS) as write_api:
         write_api.write(bucket = config['influx2']['bucket'], record=points)
-        print(f"Finished writing file/bytes {axis} at timestamp: {timens}")
+        print(f"Finished writing file/bytes from {sensor_id}_{axis} at timestamp: {timens}")
 
 # Function to process temperature data and write to InfluxDB
 def temperature2influxdb(temperature, timens, sensor_id):
     point = Point("temperature").tag("sensor_id", sensor_id).field("temperature", temperature).time(UTCDateTime(timens*1e-9).isoformat())
     with influx_client.write_api(write_options=SYNCHRONOUS) as write_api:
         write_api.write(bucket=config['influx2']['bucket'], record=point)
-        print(f"Finished writing temperature data at timestamp: {timens}")
+        print(f"Finished writing temperature data from {sensor_id} at timestamp: {timens}")
 
 # Callback for MQTT messages
 def on_message(mqtt_client, userdata, msg):
@@ -85,7 +94,6 @@ def on_message(mqtt_client, userdata, msg):
     # Extract sensor_id from a mseed stream
     sensor_id = read(io.BytesIO(data_z), format="MSEED")[0].id
     print(sensor_id)
-
     # Extract the list of sensors from the config file 
     sensors_list = config['sensors']['sensors'].replace(" ", "").replace("\n", "").split(",")
 
@@ -129,10 +137,15 @@ def main():
     mqtt_client.on_connect = on_connect
     mqtt_client.on_subscribe = on_subscribe
 
-    mqtt_client.tls_set(ca_certs = config['TLS']['ca_cert'], 
-                certfile = config['TLS']['client_cert'], 
-                keyfile = config['TLS']['client_key'], 
+    # mqtt_client.tls_set(ca_certs = config['TLS']['ca_cert'], 
+    #             certfile = config['TLS']['client_cert'], 
+    #             keyfile = config['TLS']['client_key'], 
+    #             cert_reqs=ssl.CERT_REQUIRED)
+    mqtt_client.tls_set(ca_certs = "src/certs/ca.crt", 
+                certfile = "src/certs/client.crt", 
+                keyfile = "src/certs/client.key", 
                 cert_reqs=ssl.CERT_REQUIRED)
+    
     mqtt_client.tls_insecure_set(True)
 
     print("Broker IP: " + config['MQTT']['broker'])

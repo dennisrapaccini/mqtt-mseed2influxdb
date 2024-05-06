@@ -1,0 +1,20 @@
+FROM python:3.10-slim
+
+ENV PYTHONDONTWRITEBYTECODE 1
+
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /app
+
+COPY . /app 
+
+COPY requirements.txt /tmp/requirements.txt
+
+RUN pip install -r requirements.txt
+
+EXPOSE 8086
+
+CMD ["python", "src/proxy_unified.py"]
+
+
+
