@@ -7,8 +7,6 @@ import io
 import logging 
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
-#import influxdb_client
-import os
 
 
 # Read the configuration file
@@ -18,15 +16,9 @@ config.read(config_path)
 print(config['influx2']['url'])
 
 # Create a new InfluxDB client
-
 influx_client = InfluxDBClient.from_config_file(config_path)
 logging.getLogger().setLevel(logging.INFO)
 
-# influx_client = influxdb_client.InfluxDBClient(
-#     url = "http://localhost:8086",
-#     token = "iANZ3cRM9aCTECpDH5IagsIR7xQhUlDzbwX-kCnVfS3lwK5VDPcdOuoAMkmRhGp7q3KwppNZynBjvXob1KweFQ==",
-#     org = "univpm"
-# )
 
 # Set up logging errors
 logging.basicConfig(filename='src/logs/errors.log', level=logging.ERROR)
@@ -137,13 +129,9 @@ def main():
     mqtt_client.on_connect = on_connect
     mqtt_client.on_subscribe = on_subscribe
 
-    # mqtt_client.tls_set(ca_certs = config['TLS']['ca_cert'], 
-    #             certfile = config['TLS']['client_cert'], 
-    #             keyfile = config['TLS']['client_key'], 
-    #             cert_reqs=ssl.CERT_REQUIRED)
-    mqtt_client.tls_set(ca_certs = "src/certs/ca.crt", 
-                certfile = "src/certs/client.crt", 
-                keyfile = "src/certs/client.key", 
+    mqtt_client.tls_set(ca_certs = config['TLS']['ca_cert'], 
+                certfile = config['TLS']['client_cert'], 
+                keyfile = config['TLS']['client_key'], 
                 cert_reqs=ssl.CERT_REQUIRED)
     
     mqtt_client.tls_insecure_set(True)
