@@ -115,10 +115,13 @@
 ---
 
 ##  Come iniziare
-L'installazione può essere eseguita secondo due approcci: manualmente o mediante l'utilizzo di Docker-Compose. Si raccomanda l'adozione del secondo metodo per una maggiore semplicità e coerenza nell'ambiente di esecuzione.
+L'installazione può essere eseguita secondo due approcci: manualmente o mediante l'utilizzo di Docker-Compose. Si raccomanda di adottare il secondo per una maggiore semplicità e coerenza nell'ambiente di esecuzione.
+
+> [!NOTE]
+> 
+> _I passi riportati sono specifici per sistemi Ubuntu/Debian, ma possono essere facilmente estesi ad altri sistemi._
 
 ### Prerequisiti
-
 Preliminarmente, è necessario installare le seguenti dipendenze.
 
 Se si procede __manualmente__:
@@ -129,21 +132,51 @@ Se si procede __manualmente__:
 
 Se si procede con __docker__:
   - Git
-  - Docker
+  - Docker e Docker Compose (automaticamente installati con Docker Desktop)
 
 ###  Installazione manuale
+1. Clonare la repository:
+   
+	```sh
+	$ git clone https://github.com/dennisrapaccini/mqtt-mseed2influxdb
+	```
+2. Scaricare e installare _InfluxDB_:
+   
+   	```sh
+	$ curl -O https://download.influxdata.com/influxdb/releases/influxdb2_2.7.6-1_amd64.deb
+    $ sudo dpkg -i influxdb2_2.7.6-1_amd64.deb
+	```
+    Per altri sistemi, fare riferimento alla [documentazione](https://docs.influxdata.com/influxdb/v2/install/?t=Linux) ufficiale.
+> [!NOTE]
+>
+> _Potrebbe capitare che `curl` non riesca a scaricare correttamente il pacchetto e quindi risulta necessario scaricarlo e installarlo manualmente (es. mediante un gestore pacchetti).\
+> Si __sconsiglia fortemente__ di installarlo con `sudo apt-get install influxdb` in quanto la versione non sarebbe compatibile con il presente progetto._
 
-### 1. Clonare la repository mediante:
+   
+3. Scaricare e installare _Grafana_:
 
-```sh
-git clone https://github.com/dennisrapaccini/mqtt-mseed2influxdb
-```
+   	```sh
+	$ wget -q -O - https://packages.grafana.com/gpg.key | gpg --dearmor | sudo tee /usr/share/keyrings/grafana.gpg > /dev/null
+    $ echo "deb [signed-by=/usr/share/keyrings/grafana.gpg] https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+    $ sudo apt update
+    $ sudo apt install grafana
+	```
+    Analogamente al precedente, per altri sistemi, fare riferimento alla [documentazione](https://grafana.com/docs/grafana/latest/setup-grafana/installation/) ufficiale.
 
-#### Installazione mediante `docker`
+### Installazione mediante Docker (consigliata)
+1. Clonare la repository:
+   
+	```sh
+	$ git clone https://github.com/dennisrapaccini/mqtt-mseed2influxdb
+	```
+ 
+ 2. Comporre i container di _InfluxDB_ e _Grafana_:
 
-```sh
-> INSERT-INSTALL-COMMANDS
-```
+	```sh
+	$ docker-compose up -d influxdb grafana
+	```
+    
+
 
 ###  Running mqtt-mseed2influxdb
 
