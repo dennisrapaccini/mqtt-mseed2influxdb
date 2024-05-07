@@ -23,12 +23,13 @@
 
 ##  Links
 
-> - [ Sommario](#-Sommario)
-> - [ Features](#-features)
-> - [ Struttura del progetto](#-struttura-del-progetto)
-> - [ Modules](#-modules)
-> - [ Come iniziare](#-come-iniziare)
->   - [ Installazione](#-installation)
+> - [Sommario](#sommario)
+> - [Features](#features)
+> - [Struttura del progetto](#struttura-del-progetto)
+> - [Modules](#modules)
+> - [Come iniziare](#come-iniziare)
+>   - [ Installazione manuale](#installazione-manuale)
+>   - [ Installazione mediante Docker](#-nstallazione-mediante-docker)
 >   - [ Running mqtt-mseed2influxdb](#-running-mqtt-mseed2influxdb)
 >   - [ Tests](#-tests)
 > - [ Project Roadmap](#-project-roadmap)
@@ -38,19 +39,19 @@
 
 ---
 
-##  Sommario
+## Sommario
 
 <code>► INSERT-TEXT-HERE</code>
 
 ---
 
-##  Features
+## Features
 
 <code>► INSERT-TEXT-HERE</code>
 
 ---
 
-##  Struttura del progetto
+## Struttura del progetto
 
 ```sh
 └── mqtt-mseed2influxdb/
@@ -74,7 +75,7 @@
 
 ---
 
-##  Modules
+## Modules
 
 <details closed><summary>.</summary>
 
@@ -114,7 +115,7 @@
 
 ---
 
-##  Come iniziare
+## Come iniziare
 L'installazione può essere eseguita secondo due approcci: manualmente o mediante l'utilizzo di Docker-Compose. Si raccomanda di adottare il secondo per una maggiore semplicità e coerenza nell'ambiente di esecuzione.
 
 > [!NOTE]
@@ -134,7 +135,7 @@ Se si procede con __docker__:
   - Git
   - Docker e Docker Compose (automaticamente installati con Docker Desktop)
 
-###  Installazione manuale
+### Installazione manuale
 1. Clonare la repository:
    
 	```sh
@@ -175,10 +176,31 @@ Se si procede con __docker__:
 	```sh
 	$ docker-compose up -d influxdb grafana
 	```
-    
+## Configurazione
+Prima di avviare l'applicazione, è necessario configurare il _broker MQTT_, _InfluxDB_, _Grafana_ e il _proxy_ modificando i file [.env](.env) e [config.ini](config.ini). 
+
+#### Broker MQTT 
+Nel file [config.ini](config.ini), sotto le sezioni `[TLS]` e `[MQTT]`, si possono modificare i vari parametri di rete e di protocollo per la comunicazione con i sensori. 
+```ini
+[TLS]
+ca_cert = src/certs/ca.crt
+client_cert = src/certs/client.crt
+client_key = src/certs/client.key
+
+[MQTT]
+broker = 193.205.129.120
+port = 8883
+qos = 1
+topic = S.H.M.
+```
+
+#### InfluxDB
+Il client InfluxDB può essere settato in due modi: utilizzando le **variabili d'ambiente** (.env) o utilizzando la **UI**.
+- Il file [.env][.env] contiene le variabili d'ambiente necessarie ad InfluxDB per inizializzare un nuovo database e per 
 
 
-###  Running mqtt-mseed2influxdb
+
+### Uso
 
 Use the following command to run mqtt-mseed2influxdb:
 
@@ -186,7 +208,7 @@ Use the following command to run mqtt-mseed2influxdb:
 > INSERT-RUN-COMMANDS
 ```
 
-###  Tests
+### Tests
 
 To execute tests, run:
 
@@ -196,7 +218,7 @@ To execute tests, run:
 
 ---
 
-##  Project Roadmap
+## Project Roadmap
 
 - [X] `► INSERT-TASK-1`
 - [ ] `► INSERT-TASK-2`
@@ -204,7 +226,7 @@ To execute tests, run:
 
 ---
 
-##  Contributing
+## Contributing
 
 Contributions are welcome! Here are several ways you can contribute:
 
