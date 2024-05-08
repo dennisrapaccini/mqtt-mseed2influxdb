@@ -213,9 +213,16 @@ topic = S.H.M.
 
 #### InfluxDB
 Il client InfluxDB può essere settato utilizzando le **variabili d'ambiente** (.env) o utilizzando la **UI**.
-- Il file [.env](.env) contiene le variabili d'ambiente necessarie ad InfluxDB per inizializzare un nuovo database e per 
-
-
+- Il file [.env](.env) contiene le variabili d'ambiente necessarie ad InfluxDB per inizializzare un nuovo database e un client.
+  
+| **Variabile** | **Descrizione**                                                                                                                                                                                                                                                 |
+|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|    `USERNAME`   | Username necessario per la creazione di un nuovo utente.                                                                                                                                                                                                        |
+|    `PASSWORD`   | Password necessaria per la creazione di un nuovo utente.<br>Deve essere lunga almeno 8 caratteri.                                                                                                                                                               |
+|      `ORG`   | _Organization Name_. Un organization è un workspace per un gruppo di utenti, <br>tutti i dashboard e i bucket appartengono ad un organizzazione.                                                                                                                |
+|      `URL`      | L'accesso a InfluxDB e alla UI viene fatto a questo URL. L'host di default è _localhost_ con porta _8086_.<br>Se si utilizza Docker, l'host va sostituito con l'indirizzo IP del gateway tra il Docker host e il bridge<br>di rete: solitamente è _172.17.0.1_. |
+|     `TOKEN`     | Token API personalizzabile per l'autenticazione alle richieste a InfluxDB.                                                                                                                                                                                      |
+|     `BUCKET`    | Nome del bucket da creare o già creato su cui scrivere le serie temporali.                                                                                                                                                                                      |
 
 ### Uso
 
