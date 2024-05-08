@@ -29,7 +29,7 @@
 > - [Modules](#modules)
 > - [Come iniziare](#come-iniziare)
 >   - [ Installazione manuale](#installazione-manuale)
->   - [ Installazione mediante Docker](#-nstallazione-mediante-docker)
+>   - [ Installazione mediante Docker](#-installazione-mediante-docker)
 >   - [ Running mqtt-mseed2influxdb](#-running-mqtt-mseed2influxdb)
 >   - [ Tests](#-tests)
 > - [ Project Roadmap](#-project-roadmap)
