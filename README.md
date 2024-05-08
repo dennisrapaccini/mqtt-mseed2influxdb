@@ -55,11 +55,15 @@
 
 ```sh
 └── mqtt-mseed2influxdb/
-    ├── Dockerfile
+    ├── Dockerfile-proxy
+    ├── Dockerfile-query
+    ├── README.md
     ├── config.ini
-    ├── datasource.yaml
     ├── docker-compose.yml
     ├── grafana-provisioning
+    │   ├── dashboards
+    │   │   ├── dashboard.yaml
+    │   │   └── seismic.json
     │   └── datasources
     │       └── datasource.yaml
     ├── requirements.txt
@@ -70,9 +74,10 @@
         │   └── client.key
         ├── logs
         │   └── errors.log
-        └── proxy_unified.py
+        ├── proxy_unified.py
+        ├── query.csv
+        └── query.py
 ```
-
 ---
 
 ## Modules
