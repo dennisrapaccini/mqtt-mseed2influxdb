@@ -4,19 +4,23 @@ import paho.mqtt.client as mqtt
 import ssl
 import configparser
 import io 
+import os
 import logging 
+from dotenv import load_dotenv, find_dotenv
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 
-# Read the configuration file
+# Read the configuration file and load env variables 
 config_path = "config.ini"
 config = configparser.ConfigParser()
 config.read(config_path)
-print(config['influx2']['url'])
+
+load_dotenv()
 
 # Create a new InfluxDB client
-influx_client = InfluxDBClient.from_config_file(config_path)
+influx_client = InfluxDBClient(url = os.getenv("URL"), token=os.getenv("TOKEN"), org=os.getenv("ORG"))
+
 logging.getLogger().setLevel(logging.INFO)
 
 
@@ -42,14 +46,15 @@ def mseed2influxdb(data, axis, timens, sensor_id):
               for i, value in enumerate(trace.data)]
     # Write the points to InfluxDB
     with influx_client.write_api(write_options=SYNCHRONOUS) as write_api:
-        write_api.write(bucket = config['influx2']['bucket'], record=points)
+        write_api.write(bucket = os.getenv("BUCKET"), record=points)
+        print(trace)
         print(f"Finished writing file/bytes from {sensor_id}_{axis} at timestamp: {timens}")
 
 # Function to process temperature data and write to InfluxDB
 def temperature2influxdb(temperature, timens, sensor_id):
     point = Point("temperature").tag("sensor_id", sensor_id).field("temperature", temperature).time(UTCDateTime(timens*1e-9).isoformat())
     with influx_client.write_api(write_options=SYNCHRONOUS) as write_api:
-        write_api.write(bucket=config['influx2']['bucket'], record=point)
+        write_api.write(bucket = os.getenv("BUCKET"), record=point)
         print(f"Finished writing temperature data from {sensor_id} at timestamp: {timens}")
 
 # Callback for MQTT messages
@@ -83,7 +88,7 @@ def on_message(mqtt_client, userdata, msg):
     data_z = bytes_array[28 + size_x + size_y: 28 + size_x + size_y + size_z]
     
     
-    # Extract sensor_id from a mseed stream
+    # Extract sensor_id from a MSEED stream
     sensor_id = read(io.BytesIO(data_z), format="MSEED")[0].id
     print(sensor_id)
     # Extract the list of sensors from the config file 

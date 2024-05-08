@@ -4,13 +4,6 @@
     
 services:
 
-  entrypoint_script:
-    image: ubuntu:21.04
-    working_dir: /path/to/where/you/want/to/mount/script/
-    volumes:
-      - /host/path/to/directory/with/script/:/path/to/where/you/want/to/mount/script/
-    command: [ "yourscript" ]
-
   influxdb:
     image: influxdb:latest
     container_name: influxdb
@@ -56,8 +49,18 @@ services:
       - .:/app
     build:
       context: .
+      dockerfile: Dockerfile-proxy
+    
+  query:
+    container_name: query
+    command: python3 /app/src/query.py
+    depends_on:
+      - influxdb
+    volumes:
+      - .:/app
+    build:
+      context: .
       dockerfile: Dockerfile
-         
 
 volumes:
   influxdb2-data:
