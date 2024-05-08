@@ -195,7 +195,7 @@ topic = S.H.M.
 ```
 
 #### InfluxDB
-Il client InfluxDB può essere settato in due modi: utilizzando le **variabili d'ambiente** (.env) o utilizzando la **UI**.
+Il client InfluxDB può essere settato utilizzando le **variabili d'ambiente** (.env) o utilizzando la **UI**.
 - Il file [.env][.env] contiene le variabili d'ambiente necessarie ad InfluxDB per inizializzare un nuovo database e per 
 
 
