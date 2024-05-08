@@ -2,7 +2,7 @@
     <h1 align="center">MQTT-MSEED2INFLUXDB PROXY</h1>
 </p>
 <p align="center">
-    <em>► Applicazione/Proxy che scrive pacchetti <code>MSEED</code> da MQTT su InfluxDB per la gestione e l'analisi dei dati sismici</em>
+    <em>► Applicazione/Proxy che scrive pacchetti <code>MSEED</code> da MQTT su InfluxDB per la gestione e l'analisi di dati sismici</em>
 </p>
 <p align="center">
 	<img src="https://img.shields.io/github/license/dennisrapaccini/mqtt-mseed2influxdb?style=flat&color=0080ff" alt="license">
