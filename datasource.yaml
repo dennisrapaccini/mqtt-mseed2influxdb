@@ -9,8 +9,8 @@ datasources:
       httpHeaderValue1: Token $TOKEN
 
     access: proxy
-    database: $BUCKET
-    url: $URL
+    database: ${BUCKET}
+    url: ${URL}
     isDefault: true
     #editable: true
 

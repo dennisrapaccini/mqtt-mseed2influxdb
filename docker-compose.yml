@@ -1,8 +1,15 @@
 # networks:
 #   influxdb_network:
 #     driver: bridge
-      
+    
 services:
+
+  entrypoint_script:
+    image: ubuntu:21.04
+    working_dir: /path/to/where/you/want/to/mount/script/
+    volumes:
+      - /host/path/to/directory/with/script/:/path/to/where/you/want/to/mount/script/
+    command: [ "yourscript" ]
 
   influxdb:
     image: influxdb:latest
@@ -13,7 +20,10 @@ services:
     ports:
       - "8086:8086"
     # security_opt:
-    #   - no-new-privileges:true
+    #   - no-new-privileges:true 
+    env_file:
+      - path: ./.env
+        required: true # Set to false if you want to log in via the InfluxDB UI 
     environment: 
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - DOCKER_INFLUXDB_INIT_USERNAME=${USER}
@@ -34,7 +44,7 @@ services:
       - ./grafana-provisioning/:/etc/grafana/provisioning
     depends_on:
       - influxdb
-
+    
   proxy:
     container_name: mqtt-mseed2influxdb
     command: python3 /app/src/proxy_unified.py
