@@ -80,15 +80,15 @@
 ```
 ---
 
-## Modules
+##  Modules
 
 <details closed><summary>.</summary>
 
 | File                                                                                                        | Summary                         |
 | ---                                                                                                         | ---                             |
 | [docker-compose.yml](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/docker-compose.yml) | <code>► INSERT-TEXT-HERE</code> |
-| [Dockerfile](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/Dockerfile)                 | <code>► INSERT-TEXT-HERE</code> |
-| [datasource.yaml](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/datasource.yaml)       | <code>► INSERT-TEXT-HERE</code> |
+| [Dockerfile-proxy](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/Dockerfile-proxy)     | <code>► INSERT-TEXT-HERE</code> |
+| [Dockerfile-query](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/Dockerfile-query)     | <code>► INSERT-TEXT-HERE</code> |
 | [requirements.txt](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/requirements.txt)     | <code>► INSERT-TEXT-HERE</code> |
 
 </details>
@@ -101,10 +101,20 @@
 
 </details>
 
+<details closed><summary>grafana-provisioning.dashboards</summary>
+
+| File                                                                                                                                | Summary                         |
+| ---                                                                                                                                 | ---                             |
+| [seismic.json](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/grafana-provisioning/dashboards/seismic.json)     | <code>► INSERT-TEXT-HERE</code> |
+| [dashboard.yaml](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/grafana-provisioning/dashboards/dashboard.yaml) | <code>► INSERT-TEXT-HERE</code> |
+
+</details>
+
 <details closed><summary>src</summary>
 
 | File                                                                                                        | Summary                         |
 | ---                                                                                                         | ---                             |
+| [query.py](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/src/query.py)                 | <code>► INSERT-TEXT-HERE</code> |
 | [proxy_unified.py](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/src/proxy_unified.py) | <code>► INSERT-TEXT-HERE</code> |
 
 </details>
