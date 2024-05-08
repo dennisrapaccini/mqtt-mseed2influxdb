@@ -6,11 +6,11 @@ datasources:
     jsonData:
       httpHeaderName1: Authorization
     secureJsonData:
-      httpHeaderValue1: Token 
+      httpHeaderValue1: Token $TOKEN
 
     access: proxy
-    database: 
-    url: 
+    database: ${BUCKET}
+    url: ${URL}
     isDefault: true
     #editable: true
 

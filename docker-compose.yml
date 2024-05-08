@@ -60,7 +60,7 @@ services:
       - .:/app
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-query
 
 volumes:
   influxdb2-data:
