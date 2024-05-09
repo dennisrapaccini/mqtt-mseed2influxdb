@@ -215,14 +215,16 @@ topic = S.H.M.
 Il client InfluxDB può essere configurato utilizzando le **variabili d'ambiente** (.env) (consigliato) oppure utilizzando la **UI**:
 - Il file [.env](.env) contiene le **variabili d'ambiente** (modificabili a piacimento) necessarie ad InfluxDB per inizializzare un nuovo database e un client. 
   
-| **Variabile** | **Descrizione**                                                                                                                                                                                                                                                 |
-|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|    `USERNAME`   | Username necessario per la creazione di un nuovo utente.                                                                                                                                                                                                        |
-|    `PASSWORD`   | Password necessaria per la creazione di un nuovo utente.<br>Deve essere lunga almeno 8 caratteri.                                                                                                                                                               |
-|      `ORG`   | _Organization Name_. Un organization è un workspace per un gruppo di utenti, <br>tutti i dashboard e i bucket appartengono ad un organizzazione (es. univpm).                                                                                                                |
-|      `URL`      | L'accesso a InfluxDB e alla UI viene fatto a questo URL. L'host di default è _localhost_ con porta _8086_.<br>Se si utilizza Docker, l'host va sostituito con l'indirizzo IP del gateway tra il Docker host e il bridge<br>di rete: solitamente è _172.17.0.1_. |
-|     `TOKEN`     | Token API personalizzabile per l'autenticazione alle richieste a InfluxDB.                                                                                                                                                                                      |
-|     `BUCKET`    | Nome del bucket da creare o già creato su cui scrivere le serie temporali (es. seismic).                                                                                                                                                                                      |
+	| **Variabile** | **Descrizione**                                                                                                                                                                                                                                                 |
+	|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+	|    `USERNAME`   | Username necessario per la creazione di un nuovo utente.                                                                                                                                                                                                        |
+	|    `PASSWORD`   | Password necessaria per la creazione di un nuovo utente.<br>Deve essere lunga almeno 8 caratteri.                                                                                                                                                               |
+	|      `ORG`   | _Organization Name_. Un organization è un workspace per un gruppo di utenti, <br>tutti i dashboard e i bucket appartengono ad un organizzazione (es. univpm).                                                                                                                |
+	|      `URL`      | L'accesso a InfluxDB e alla UI viene fatto a questo URL. L'host di default è _localhost_ con porta _8086_.<br>Se si utilizza Docker, l'host va sostituito con l'indirizzo IP del gateway tra il Docker host e il bridge<br>di rete: solitamente è _172.17.0.1_. |
+	|     `TOKEN`     | Token API personalizzabile per l'autenticazione alle richieste a InfluxDB.                                                                                                                                                                                      |
+	|     `BUCKET`    | Nome del bucket da creare o già creato su cui scrivere le serie temporali (es. seismic).                                                                                                                                                                                      |
+
+
 
 - Per configurare InfluxDB attraverso l'**interfaccia grafica (UI)** (sconsigliato) occorre eliminare (o _commentare_), all'interno del file [docker-compose.yml](docker-compose.yml) la seguente porzione di codice:
 
@@ -256,17 +258,47 @@ La configurazione si ritiene completa dopo aver visitato [http://localhost:3000/
 3. Nel menù a tendina sulla sinistra, sotto la voce **Connection**, cliccare **Data sources** e scegliere _InfluxDB_.
 4. Nella sezione **Custom HTTP Headers**, dopo aver cliccato **Reset**, inserire `Authorization` nel campo **Header** (di default) e la stringa \
    `Token mytoken` nel campo **Value**, sostituendo `mytoken` con il _token_ utilizzato per InfluxDB.
-5. Nella sezione **InfluxDB Details**, nel campo **Database** inserire il nome del _bucket_ di InfluxDB in cui sono scritte le serie temporali.
-
+5. Nella sezione **InfluxDB Details**, nel campo **Database** inserire il nome del _bucket_ di InfluxDB ospitanti le serie temporali.
+6. Cliccare su **Save & Test**. Se la configurazione è andata a buon fine comparirà un un box di conferma come in figura.
+   
 
 
 ### Uso
+#### Scrittura dei pacchetti MSEED su InfluxDB
+Il processing e la _scrittura_ su InfluxDB dei valori di accelerazione e di temperatura provenienti dai sensori viene gestita ed effettuata da [proxy_unified.py](src/proxy_unified.py).\
+\
+Per una più facile personalizzazione, vi è la possibilità di scegliere quali sensori considerare per la scrittura semplicemente aggiungendo o eliminando l'_id_ del sensore nel file [config.ini](config.ini), nella sezione `[sensors]`. \
+E' possibile inoltre escludere o includere la temperatura impostando la chiave `use_temperature` con valore `True` o `False`.
 
-Use the following command to run mqtt-mseed2influxdb:
-
-```sh
-> INSERT-RUN-COMMANDS
+```ini
+[sensors]
+use_temperature = True
+; List of sensors to be written into InfluxDB. Delete if you want to exclude a sensor
+sensors = IU.ANMO.08.BHZ, 
+	  IU.ANMO.09.BHZ,
+	  IU.ANMO.25.BHZ
 ```
+
+
+Per avviare lo script eseguire da terminale, nella directory del progetto, i seguenti comandi:
+- **Docker**:
+  
+  ```sh
+  $ docker-compose up proxy
+  ```
+
+- **Manuale**:
+  
+  ```sh
+  $ python3 src/proxy_unified.py
+  ```
+
+  
+
+
+
+
+
 
 ### Tests
 
