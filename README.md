@@ -188,7 +188,7 @@ Se si procede con __docker__:
 	$ git clone https://github.com/dennisrapaccini/mqtt-mseed2influxdb
 	```
  
- 2. Comporre i container di _InfluxDB_ e _Grafana_:
+ 2. Comporre e avviare i container di _InfluxDB_ e _Grafana_:
 
 	```sh
 	$ docker-compose up -d influxdb grafana
@@ -212,8 +212,8 @@ topic = S.H.M.
 ```
 
 #### InfluxDB
-Il client InfluxDB può essere settato utilizzando le **variabili d'ambiente** (.env) o utilizzando la **UI**.
-- Il file [.env](.env) contiene le variabili d'ambiente necessarie ad InfluxDB per inizializzare un nuovo database e un client.
+Il client InfluxDB può essere configurato utilizzando le **variabili d'ambiente** (.env) o utilizzando la **UI**:
+- Il file [.env](.env) contiene le variabili d'ambiente (modificabili a piacimento) necessarie ad InfluxDB per inizializzare un nuovo database e un client. 
   
 | **Variabile** | **Descrizione**                                                                                                                                                                                                                                                 |
 |---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -223,6 +223,9 @@ Il client InfluxDB può essere settato utilizzando le **variabili d'ambiente** (
 |      `URL`      | L'accesso a InfluxDB e alla UI viene fatto a questo URL. L'host di default è _localhost_ con porta _8086_.<br>Se si utilizza Docker, l'host va sostituito con l'indirizzo IP del gateway tra il Docker host e il bridge<br>di rete: solitamente è _172.17.0.1_. |
 |     `TOKEN`     | Token API personalizzabile per l'autenticazione alle richieste a InfluxDB.                                                                                                                                                                                      |
 |     `BUCKET`    | Nome del bucket da creare o già creato su cui scrivere le serie temporali.                                                                                                                                                                                      |
+
+- Per utilizzare l'interfaccia grafica (UI) di InfluxDB occorre visitare l'indirizzo [http://localhost:8086/](http://localhost:8086/) attraverso un qualsiasi browser. 
+  
 
 ### Uso
 
