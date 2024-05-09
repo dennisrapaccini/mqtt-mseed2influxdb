@@ -212,20 +212,53 @@ topic = S.H.M.
 ```
 
 #### InfluxDB
-Il client InfluxDB può essere configurato utilizzando le **variabili d'ambiente** (.env) o utilizzando la **UI**:
-- Il file [.env](.env) contiene le variabili d'ambiente (modificabili a piacimento) necessarie ad InfluxDB per inizializzare un nuovo database e un client. 
+Il client InfluxDB può essere configurato utilizzando le **variabili d'ambiente** (.env) (consigliato) oppure utilizzando la **UI**:
+- Il file [.env](.env) contiene le **variabili d'ambiente** (modificabili a piacimento) necessarie ad InfluxDB per inizializzare un nuovo database e un client. 
   
 | **Variabile** | **Descrizione**                                                                                                                                                                                                                                                 |
 |---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |    `USERNAME`   | Username necessario per la creazione di un nuovo utente.                                                                                                                                                                                                        |
 |    `PASSWORD`   | Password necessaria per la creazione di un nuovo utente.<br>Deve essere lunga almeno 8 caratteri.                                                                                                                                                               |
-|      `ORG`   | _Organization Name_. Un organization è un workspace per un gruppo di utenti, <br>tutti i dashboard e i bucket appartengono ad un organizzazione.                                                                                                                |
+|      `ORG`   | _Organization Name_. Un organization è un workspace per un gruppo di utenti, <br>tutti i dashboard e i bucket appartengono ad un organizzazione (es. univpm).                                                                                                                |
 |      `URL`      | L'accesso a InfluxDB e alla UI viene fatto a questo URL. L'host di default è _localhost_ con porta _8086_.<br>Se si utilizza Docker, l'host va sostituito con l'indirizzo IP del gateway tra il Docker host e il bridge<br>di rete: solitamente è _172.17.0.1_. |
 |     `TOKEN`     | Token API personalizzabile per l'autenticazione alle richieste a InfluxDB.                                                                                                                                                                                      |
-|     `BUCKET`    | Nome del bucket da creare o già creato su cui scrivere le serie temporali.                                                                                                                                                                                      |
+|     `BUCKET`    | Nome del bucket da creare o già creato su cui scrivere le serie temporali (es. seismic).                                                                                                                                                                                      |
 
-- Per utilizzare l'interfaccia grafica (UI) di InfluxDB occorre visitare l'indirizzo [http://localhost:8086/](http://localhost:8086/) attraverso un qualsiasi browser. 
+- Per configurare InfluxDB attraverso l'**interfaccia grafica (UI)** (sconsigliato) occorre eliminare (o _commentare_), all'interno del file [docker-compose.yml](docker-compose.yml) la seguente porzione di codice:
+
+> [!NOTE]
+>
+> _Nel caso di installazione manuale assicurarsi che il servizio di InfluxDB sia attivo eseguendo il comando_ `sudo systemctl start influxdb`.
   
+```yaml
+environment: 
+   - DOCKER_INFLUXDB_INIT_MODE=setup
+   - DOCKER_INFLUXDB_INIT_USERNAME=${USER}
+   - DOCKER_INFLUXDB_INIT_PASSWORD=${PASSWORD}
+   - DOCKER_INFLUXDB_INIT_ORG=${ORG}
+   - DOCKER_INFLUXDB_INIT_BUCKET=${BUCKET}
+   - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${TOKEN}
+```
+  Successivamente:
+  1. Visitare l'indirizzo [http://localhost:8086/](http://localhost:8086/) attraverso un qualsiasi browser.
+  2. Cliccare **Get Started**.
+  3. Scegliere e inserire un **Username** e una **Password**.
+  4. Inserire l'**Organization Name**.
+  5. Inserire il nome del **Bucket** da inizializzare.
+  6. Copiare il **Token** generato
+  7. Sostituire i valori dei campi nel file [.env](.env) con quelli inseriti nei punti precedenti.
+
+#### Grafana
+Sebbene una dashboard sia già stata creata e personalizzata appositamente per questo progetto (file [seismic.json](grafana-provisioning/dashboards/seismic.json)), il collegamento Grafana - InfluxDB va impostato manualmente. Grafana infatti non permette, a causa di un bug, l'uso di variabili d'ambiente per la configurazione del server.\
+La configurazione si ritiene completa dopo aver visitato [http://localhost:3000/](http://localhost:3000/) da browser e aver seguito i passi sotto riportati:
+1. Inserire `admin` sia come **username** che come **password** e fare il _**Log in**_.
+2. Scegliere e inserire un nuovo **username** e una nuova **password** o, altrimenti, cliccare su **_skip_** per mantenere quelle di default.
+3. Nel menù a tendina sulla sinistra, sotto la voce **Connection**, cliccare **Data sources** e scegliere _InfluxDB_.
+4. Nella sezione **Custom HTTP Headers**, dopo aver cliccato **Reset**, inserire `Authorization` nel campo **Header** (di default) e la stringa \
+   `Token mytoken` nel campo **Value**, sostituendo `mytoken` con il _token_ utilizzato per InfluxDB.
+5. Nella sezione **InfluxDB Details**, nel campo **Database** inserire il nome del _bucket_ di InfluxDB in cui sono scritte le serie temporali.
+
+
 
 ### Uso
 
