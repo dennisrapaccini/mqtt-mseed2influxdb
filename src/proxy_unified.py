@@ -6,7 +6,7 @@ import configparser
 import io 
 import os
 import logging 
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
