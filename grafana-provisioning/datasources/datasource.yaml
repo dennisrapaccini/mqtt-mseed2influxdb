@@ -10,7 +10,7 @@ datasources:
 
     access: proxy
     database: ${BUCKET}
-    url: ${URL}
+    url: http://172.17.0.1:8086
     isDefault: true
-    #editable: true
+    editable: true
 

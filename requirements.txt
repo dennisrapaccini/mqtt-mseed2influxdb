@@ -2,8 +2,6 @@ obspy
 paho-mqtt
 scipy
 numpy
-csv
-datetime
 scipy
 python-dotenv
 influxdb-client

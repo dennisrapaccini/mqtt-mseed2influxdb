@@ -47,7 +47,7 @@ def mseed2influxdb(data, axis, timens, sensor_id):
     # Write the points to InfluxDB
     with influx_client.write_api(write_options=SYNCHRONOUS) as write_api:
         write_api.write(bucket = os.getenv("BUCKET"), record=points)
-        print(trace)
+        #print(trace)
         print(f"Finished writing file/bytes from {sensor_id}_{axis} at timestamp: {timens}")
 
 # Function to process temperature data and write to InfluxDB
@@ -90,7 +90,7 @@ def on_message(mqtt_client, userdata, msg):
     
     # Extract sensor_id from a MSEED stream
     sensor_id = read(io.BytesIO(data_z), format="MSEED")[0].id
-    print(sensor_id)
+    #print(sensor_id)
     # Extract the list of sensors from the config file 
     sensors_list = config['sensors']['sensors'].replace(" ", "").replace("\n", "").split(",")
 
