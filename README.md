@@ -259,7 +259,9 @@ La configurazione si ritiene completa dopo aver visitato [http://localhost:3000/
 4. Nella sezione **Custom HTTP Headers**, dopo aver cliccato **Reset**, inserire `Authorization` nel campo **Header** (di default) e la stringa \
    `Token mytoken` nel campo **Value**, sostituendo `mytoken` con il _token_ utilizzato per InfluxDB.
 5. Nella sezione **InfluxDB Details**, nel campo **Database** inserire il nome del _bucket_ di InfluxDB ospitanti le serie temporali.
-6. Cliccare su **Save & Test**. Se la configurazione è andata a buon fine comparirà un un box di conferma come in figura.
+6. Cliccare su **Save & Test**. Se la configurazione è andata a buon fine comparirà un box di conferma come in figura.
+   
+   ![ciao](docs/images/image1.png)
    
 
 
