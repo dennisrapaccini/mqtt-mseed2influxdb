@@ -313,6 +313,11 @@ Se, dopo aver switchato su **View raw data** e aver fatto **SUBMIT**, non vengon
 <img src="docs/images/image6.png" alt="drawing" width="200"/>
 
 #### Visualizzazione dei dati con Grafana
+Accedendo all'interfaccia grafica si può visualizzare l'andamento temporale (in quasi-realtime) dei valori misurati dai sensori. E' stata infatti creata una dashboard (accessibile dalla sezione **Dashboards**) chiamata _Seismic Monitoring_ ad hoc per questo progetto. Essa contiene una moltitudine di plot ordinati e raggruppati per i diversi sensori, come nelle seguenti figure.
+
+<img src="docs/images/image7.png" alt="drawing" width="800"/>
+
+<img src="docs/images/image8.png" alt="drawing" width="800"/>
 
 ### Tests
 
