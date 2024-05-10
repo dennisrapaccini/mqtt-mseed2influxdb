@@ -25,7 +25,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "fieldConfig": {
           "defaults": {
@@ -104,7 +104,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "measurement": "acceleration",
@@ -145,7 +145,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "fieldConfig": {
           "defaults": {
@@ -226,7 +226,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "measurement": "acceleration",
@@ -267,7 +267,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "fieldConfig": {
           "defaults": {
@@ -346,7 +346,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "measurement": "acceleration",
@@ -387,7 +387,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "fieldConfig": {
           "defaults": {
@@ -467,7 +467,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "measurement": "acceleration",
@@ -508,7 +508,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "fieldConfig": {
           "defaults": {
@@ -587,7 +587,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "measurement": "acceleration",
@@ -628,7 +628,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "fieldConfig": {
           "defaults": {
@@ -708,7 +708,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "measurement": "acceleration",
@@ -749,7 +749,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "fieldConfig": {
           "defaults": {
@@ -827,7 +827,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "measurement": "temperature",
@@ -860,7 +860,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "fieldConfig": {
           "defaults": {
@@ -939,7 +939,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "hide": false,
@@ -973,7 +973,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "fieldConfig": {
           "defaults": {
@@ -1051,7 +1051,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "measurement": "acceleration",
@@ -1088,7 +1088,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "hide": false,
@@ -1126,7 +1126,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "hide": false,
@@ -1168,7 +1168,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "fieldConfig": {
           "defaults": {
@@ -1246,7 +1246,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "measurement": "acceleration",
@@ -1283,7 +1283,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "hide": false,
@@ -1321,7 +1321,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "hide": false,
@@ -1363,7 +1363,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "fieldConfig": {
           "defaults": {
@@ -1441,7 +1441,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "measurement": "acceleration",
@@ -1470,7 +1470,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "hide": false,
@@ -1500,7 +1500,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "hide": false,
@@ -1534,7 +1534,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "fieldConfig": {
           "defaults": {
@@ -1612,7 +1612,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "measurement": "acceleration",
@@ -1641,7 +1641,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "hide": false,
@@ -1671,7 +1671,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "hide": false,
@@ -1705,7 +1705,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "ddhq8q3dhiuioe"
+          "uid": "InfluxDB"
         },
         "description": "",
         "fieldConfig": {
@@ -1784,7 +1784,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "measurement": "acceleration",
@@ -1813,7 +1813,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "hide": false,
@@ -1843,7 +1843,7 @@
           {
             "datasource": {
               "type": "influxdb",
-              "uid": "ddhq8q3dhiuioe"
+              "uid": "InfluxDB"
             },
             "groupBy": [],
             "hide": false,

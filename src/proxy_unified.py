@@ -55,7 +55,7 @@ def temperature2influxdb(temperature, timens, sensor_id):
     point = Point("temperature").tag("sensor_id", sensor_id).field("temperature", temperature).time(UTCDateTime(timens*1e-9).isoformat())
     with influx_client.write_api(write_options=SYNCHRONOUS) as write_api:
         write_api.write(bucket = os.getenv("BUCKET"), record=point)
-        print(f"Finished writing temperature data from {sensor_id} at timestamp: {timens}")
+        print(f"Finished writing temperature data from {sensor_id} at timestamp: {timens}\n")
 
 # Callback for MQTT messages
 def on_message(mqtt_client, userdata, msg):
