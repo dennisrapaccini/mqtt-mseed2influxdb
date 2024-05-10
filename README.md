@@ -304,14 +304,15 @@ Da ora il programma scriverà i pacchetti MSEED su InfluxDB. Informazioni in tem
 ![image3](docs/images/image3.png)
 
 #### Visualizzazione dei dati
-La InfluxDB UI permette di visualizzare (anche in real time) i dati scritti nel database. Collegandosi all'apposito indirizzo e entrando in Data Explorer <img src="docs/images/image4.png" alt="drawing" width="50"/> infatti, vi è la possibilità di effettuare delle query e visualizzare in modo "raw" le righe memorizzate. La tabella della parte inferiore consente di filtrare per bucket, asse, sensore e intervallo temporale: in figura se ne può vedere un esempio.
+La InfluxDB UI permette di visualizzare (anche in real time) i dati scritti nel database. Collegandosi all'apposito indirizzo e entrando in **Data Explorer** (<img src="docs/images/image4.png" alt="drawing" width="20"/>) infatti, vi è la possibilità di effettuare delle _query_ e visualizzare in modo "raw" le righe memorizzate. La tabella della parte inferiore consente di filtrare per bucket, asse, sensore e intervallo temporale: in figura se ne può vedere un esempio.
 
 <img src="docs/images/image5.png" alt="drawing" width="800"/>
 
-Se non vengono visualizzate correttamente tutte le righe è probabile che il responsabile sia la Aggregate Function automatica. Si può disattivare selezionando CUSTOM e deselezionando la funzione attiva (es. `mean`).
+Se non vengono visualizzate correttamente tutte le righe è probabile che il responsabile sia la **Aggregate Function** automatica. Si può disattivare selezionando **CUSTOM** e deselezionando la funzione attiva (es. `mean`).
 
-
-
+<p align="center">
+<img src="docs/images/image6.png" alt="drawing" width="100"/>
+</p>
 
 ### Tests
 
