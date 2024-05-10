@@ -317,7 +317,8 @@ Accedendo all'interfaccia grafica si può visualizzare l'andamento temporale (in
 
 <img src="docs/images/image7.png" alt="drawing" width="800"/>
 
-<img src="docs/images/image8.png" alt="drawing" width="800"/>
+<img src="docs/images/image9.png" alt="drawing" width="800"/>
+
 
 ### Tests
 
