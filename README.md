@@ -230,7 +230,7 @@ Il client InfluxDB può essere configurato utilizzando le **variabili d'ambiente
 
 > [!NOTE]
 >
-> _Nel caso di installazione manuale assicurarsi che il servizio di InfluxDB sia attivo eseguendo il comando_ `sudo systemctl start influxdb`.
+> _Nel caso di installazione manuale assicurarsi che i servizi InfluxDB e Grafana siano attivi eseguendo rispettivamente i comandi_ `sudo systemctl start influxdb` _e_ `sudo systemctl start grafana-server`.
   
 ```yaml
 environment: 
@@ -295,8 +295,11 @@ Per avviare lo script eseguire da terminale, nella directory del progetto, i seg
   $ python3 src/proxy_unified.py
   ```
 
+Se la connessione col broker MQTT è avvenuta con successo verrano stampate a video delle stringhe di conferma.
+![image2](docs/images/image2.png)
   
-
+Da ora il programma scriverà i pacchetti MSEED su InfluxDB. Informazioni in tempo reale su ogni pacchetto scritto vengono stampate a video.
+![image3](docs/images/image3.png)
 
 
 
