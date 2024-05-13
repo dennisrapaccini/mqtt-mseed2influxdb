@@ -23,7 +23,7 @@
 </p>
 <hr>
 
-##  Links
+##  Indice
 
 > - [Introduzione](#intro)
 > - [Struttura del progetto](#struttura)
