@@ -406,12 +406,12 @@ Accedendo all'interfaccia grafica si può visualizzare l'andamento temporale (in
 
 #### Queries <a name="queries"></a>
 I sensori, come spesso accade, non sono sincronizzati. Essi presentano infatti un delay temporale che, per alcune applicazioni, potrebbe risultare scomodo.
-La soluzione proposta è stata quindi quella di realizzare uno script [query.py](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/src/query.py) che consente di effettuare _queries_ al database, allineare i valori restituiti e salvarli in _CSV_.\
+La soluzione proposta è stata quindi quella di realizzare uno script [query.py](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/src/query.py) che consente di effettuare _queries_ al database, allineare i valori restituiti e salvarli in _CSV_.\ Il linguaggio richiesto per le query è il Flux, apposito per le serie temporali.
 La valutazione della correlazione viene fatta usando il _metodo della cross-correlazione_. Si verifica infatti che il delay temporale tra due segnali può essere calcolato secondo: $`\tau = arg\,max(R_{s_1\,s_2})`$.
 Per conferma, viene calcolato anche usando il _metodo dei picchi_ il quale fornisce la distanza temporale tra il picco maggiore dei due sensori.
 La sincronizzazione andrebbe eseguita seguendo i passi qui riportati:
 1. Generare "artificialmente" un picco di accelerazione (es. colpo) nei pressi dei sensori.
-2. Fare una query per un asse specificando il range temporale in modo da includere il picco (qualche secondo o meno).
+2. Fare una query (in Flux) per un asse specificando il range temporale in modo da includere il picco (qualche secondo o meno).
 3. Eseguire lo script con il seguente segmento di codice non commentato:
     ```python
   	r = delay_finder(s1,s2,250)
