@@ -29,22 +29,30 @@
 > - [Struttura del progetto](#struttura)
 > - [Modules](#moduli)
 > - [Diagramma logico](#diagramma)
+>   - [Struttura dei sensori e del database](#struttura2)
 > - [Come iniziare](#come)
+>   - [ Prerequisiti](#prerequisiti)
 >   - [ Installazione manuale](#manuale)
 >   - [ Installazione mediante Docker](#docker)
->   - [ Running mqtt-mseed2influxdb](#-running-mqtt-mseed2influxdb)
->   - [ Tests](#-tests)
-> - [ Project Roadmap](#-project-roadmap)
-> - [ Contributing](#-contributing)
+> - [Configurazione](#configurazione)
+>   - [ Broker MQTT](#broker)
+>   - [ InfluxDB](#influx)
+>   - [ Grafana](#grafana)
+> - [Uso](#uso)
+>   - [ Scrittura dei pacchetti MSEED su InfluxDB](#scrittura)
+>   - [ Visualizzazione dei dati con InfluxDB](#visualizzazione)
+>   - [ Visualizzazione dei dati con Grafana](#visualizzazione2)
+> - [Queries](#queries)
 > - [Bibliografia](#bib)
 
 ---
 
-## Introduzione <a name="sommario"></a>
+## Introduzione <a name="intro"></a>
 
-Questa applicazione è stata progettata per ricevere dati da vari sensori sismici (accelerazione e temperatura) tramite il protocollo _MQTT_ e scriverli in un database per serie temporali (_InfluxDB_). I dati ricevuti dal _broker MQTT_ sono pacchetti di bytes in formato _MSEED_.\
+Questa applicazione è stata progettata per ricevere dati da vari sensori sismici (o per monitoraggio strutturale) (accelerazione e temperatura) tramite il protocollo _MQTT_ e scriverli in un database per serie temporali (_InfluxDB_). I dati ricevuti dal _broker MQTT_ sono pacchetti di bytes in formato _MSEED_.\
 Viene fornito anche uno script che effettua queries al database e le salva in _CSV_, allineando temporalmente i valori forniti dai sensori (non sincronizzati). \
 Oltre agli script Python, è stata caricata una dashboard Grafana specifica per questo progetto. La dashboard contiene diverse visualizzazioni grafiche (anche in real-time) dei dati ricevuti e scritti in InfluxDB. 
+
 #### MSEED 
 Il formato _miniSEED_ è un sottoinsieme del più articolato formato _SEED_ (Standard for the Exchange of Earthquake Data), che nasce con lo scopo di standardizzare lo scambio di dati, relativi al campo sismologico, tra le varie comunità scientifiche. \
 L’organizzazione del formato e la relativa chiave di lettura è racchiusa all’interno di particolari
@@ -61,13 +69,13 @@ InfluxDB organizza le serie temporali in _buckets_ e _measurements_ (misure). Un
 - **Tag:** Coppie chiave-valore con valori diversi (ma generalmente poco variabili). I tag sono destinati alla memorizzazione di metadati per ogni punto, ad esempio qualcosa che identifichi la fonte dei dati (es. stazione)
 - **Fields**: Coppie chiave-valore con valori che cambiano nel tempo, ad esempio: temperatura, accelerazione.
 - **Timestamp**: Timestamp associato al dato. Quando vengono memorizzati su disco e interrogati, tutti i dati sono ordinati temporalmente. [[2]](#ref2)
-- 
+
 #### Grafana
 Grafana è un'applicazione web open-source per la visualizzazione di database per serie temporali (_InfluxDB, Graphite, Prometheus, OpenTSDB_), logging databases e per documenti (_Loki, Elasticsearch, Splunk, MongoDB_), database SQL (_MySQL, PostgreSQL, Redshift_),cloud metric databases (_AWS CloudWatch, GCP Monitoring, Azure Monitor_) e altre datasources. [[3]](#ref3)
 
 ---
 
-## Struttura del progetto <a name="intro"></a>
+## Struttura del progetto <a name="struttura"></a>
 
 ```sh
 └── mqtt-mseed2influxdb/
@@ -123,6 +131,7 @@ Grafana è un'applicazione web open-source per la visualizzazione di database pe
 | [Dockerfile-query](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/Dockerfile-query)     | Dockerfile per lo script "query" |
 | [requirements.txt](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/requirements.txt)     | File contenente tutte le dipendenze di Python |
 | [config.txt](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/config.ini)     | File di configurazione per la scrittura |
+| [.env](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/.env)     | Variabili d'ambiente per InfluxDB |
 
 </details>
 
@@ -185,8 +194,27 @@ graph TD;
     K --> L[Create InfluxDB Points using MSEED header and data]
     L --> M[(InfluxDB bucket)]
 
-
 ```
+### Struttura dei sensori e del database <a name="struttura2"></a>
+Attualmente i sensori attivi sono 3 (_"IU.ANMO.08.BHZ", "IU.ANMO.25.BHZ" e "IU.ANMO.08.BHZ"_), ciascuno misura i valori di accelerazione sui 3 assi (x,y e z) e la temperatura.
+I data points sono composti come da tabella seguente:
+
+|     **_measurement**    | **_field** |                   **sensor_id**                  | **_time** |  **value**  |
+|:-------------------------------:|:------------------:|:--------------------------------------------------------:|:-----------------:|:-------------------:|
+| - _acceleration_<br>- _temperature_ | - _x_<br>- _y_<br>- _z_     | - _IU.ANMO.08.BHZ_<br>- _IU.ANMO.09.BHZ_<br>- _IU.ANMO.25.BHZ_ | In _RFC 3339_       | in _raw_ (acc) or _°C_  |
+
+Un esempio è il seguente: 
+
+| **_measurement** |  **_field** |  **sensor_id** |         **_time**        | **value** |
+|:-----------------------:|:------------------:|:---------------------:|:-------------------------------:|:----------------:|
+|     acceleration        |     x              |     IU.ANMO.08.BHZ    |     2024-05-10T09:50:00.676Z    |     1161         |
+|     acceleration        |     y              |     IU.ANMO.08.BHZ    |     2024-05-10T09:50:00.676Z    |     1007         |
+|     acceleration        |     z              |     IU.ANMO.08.BHZ    |     2024-05-10T09:50:00.676Z    |     259777       |
+|     temperature         |     temperature    |     IU.ANMO.08.BHZ    |     2024-05-10T09:50:00.676Z    |     35.96        |
+|     temperature         |     temperature    |     IU.ANMO.25.BHZ    |     2024-05-11T15:05:27.931Z    |     38.04        |
+
+_La tabella è solo un esempio. I valori vengono salvati in modo ordinato._
+
 
 ---
 ## Come iniziare <a name="come"></a>
@@ -196,7 +224,7 @@ L'installazione può essere eseguita secondo due approcci: manualmente o mediant
 > 
 > _I passi riportati sono specifici per sistemi Ubuntu/Debian, ma possono essere facilmente estesi ad altri sistemi._
 
-### Prerequisiti
+### Prerequisiti <a name="prerequisiti"></a>
 Preliminarmente, è necessario installare le seguenti dipendenze.
 
 Se si procede __manualmente__:
@@ -253,7 +281,7 @@ Se si procede con __docker__:
 ## Configurazione <a name="configurazione"></a>
 Prima di avviare l'applicazione, è necessario configurare il _broker MQTT_, _InfluxDB_, _Grafana_ e il _proxy_ modificando i file [.env](.env) e [config.ini](config.ini). 
 
-#### Broker MQTT 
+#### Broker MQTT <a name="broker"></a>
 Nel file [config.ini](config.ini), sotto le sezioni `[TLS]` e `[MQTT]`, si possono modificare i vari parametri di rete e di protocollo per la comunicazione con i sensori. 
 ```ini
 [TLS]
@@ -268,7 +296,7 @@ qos = 1
 topic = S.H.M.
 ```
 
-#### InfluxDB
+#### InfluxDB <a name="influx"></a>
 Il client InfluxDB può essere configurato utilizzando le **variabili d'ambiente** (.env) (consigliato) oppure utilizzando la **UI**:
 - Il file [.env](.env) contiene le **variabili d'ambiente** (modificabili a piacimento) necessarie ad InfluxDB per inizializzare un nuovo database e un client. 
   
@@ -307,7 +335,7 @@ environment:
   6. Copiare il **Token** generato
   7. Sostituire i valori dei campi nel file [.env](.env) con quelli inseriti nei punti precedenti.
 
-#### Grafana
+#### Grafana <a name="grafana"></a>
 Sebbene una dashboard sia già stata creata e personalizzata appositamente per questo progetto (file [seismic.json](grafana-provisioning/dashboards/seismic.json)), il collegamento Grafana - InfluxDB va impostato manualmente. Grafana infatti non permette, a causa di un bug, l'uso di variabili d'ambiente per la configurazione del server.\
 La configurazione si ritiene completa dopo aver visitato [http://localhost:3000/](http://localhost:3000/) da browser e aver seguito i passi sotto riportati:
 1. Inserire `admin` sia come **username** che come **password** e fare il _**Log in**_.
@@ -322,8 +350,8 @@ La configurazione si ritiene completa dopo aver visitato [http://localhost:3000/
    
 
 
-### Uso <a name="uso"></a>
-#### Scrittura dei pacchetti MSEED su InfluxDB
+### Uso <a name="uso"></a> 
+#### Scrittura dei pacchetti MSEED su InfluxDB <a name="scrittura"></a>
 Il processing e la _scrittura_ su InfluxDB dei valori di accelerazione e di temperatura provenienti dai sensori viene gestita ed effettuata da [proxy_unified.py](src/proxy_unified.py).\
 \
 Per una più facile personalizzazione, vi è la possibilità di scegliere quali sensori considerare per la scrittura semplicemente aggiungendo o eliminando l'_id_ del sensore nel file [config.ini](config.ini), nella sezione `[sensors]`. \
@@ -360,7 +388,7 @@ Da ora il programma scriverà i pacchetti MSEED su InfluxDB. Informazioni in tem
 
 ![image3](docs/images/image3.png)
 
-#### Visualizzazione dei dati con InfluxDB
+#### Visualizzazione dei dati con InfluxDB <a name="visualizzazione"></a>
 La InfluxDB UI permette di visualizzare (anche in real time) i dati scritti nel database. Collegandosi all'apposito indirizzo e entrando in **Data Explorer** (<img src="docs/images/image4.png" alt="drawing" width="20"/>) infatti, vi è la possibilità di effettuare delle _query_ e visualizzare in modo "raw" le righe memorizzate. La tabella della parte inferiore consente di filtrare per bucket, asse, sensore e intervallo temporale: in figura se ne può vedere un esempio.
 
 <img src="docs/images/image5.png" alt="drawing" width="800"/>
@@ -369,70 +397,40 @@ Se, dopo aver switchato su **View raw data** e aver fatto **SUBMIT**, non vengon
 
 <img src="docs/images/image6.png" alt="drawing" width="200"/>
 
-#### Visualizzazione dei dati con Grafana
+#### Visualizzazione dei dati con Grafana <a name="visualizzazione2"></a>
 Accedendo all'interfaccia grafica si può visualizzare l'andamento temporale (in quasi-realtime) dei valori misurati dai sensori. E' stata infatti creata una dashboard (accessibile dalla sezione **Dashboards**) chiamata _Seismic Monitoring_ ad hoc per questo progetto. Essa contiene una moltitudine di plot ordinati e raggruppati per i diversi sensori, come nelle seguenti figure. Si è scelto di riportare i valori graficati in _g_, ossia in multipli dell'accelerazione di gravità.
 
 <img src="docs/images/image7.png" alt="drawing" width="800"/>
 
 <img src="docs/images/image9.png" alt="drawing" width="800"/>
 
+#### Queries <a name="queries"></a>
+I sensori, come spesso accade, non sono sincronizzati. Essi presentano infatti un delay temporale che, per alcune applicazioni, potrebbe risultare scomodo.
+La soluzione proposta è stata quindi quella di realizzare uno script [query.py](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/src/query.py) che consente di effettuare _queries_ al database, allineare i valori restituiti e salvarli in _CSV_.\
+La valutazione della correlazione viene fatta usando il _metodo della cross-correlazione_. Si verifica infatti che il delay temporale tra due segnali può essere calcolato secondo: $`\tau = arg\,max(R_{s_1\,s_2})`$.
+Per conferma, viene calcolato anche usando il _metodo dei picchi_ il quale fornisce la distanza temporale tra il picco maggiore dei due sensori.
+La sincronizzazione andrebbe eseguita seguendo i passi qui riportati:
+1. Generare "artificialmente" un picco di accelerazione (es. colpo) nei pressi dei sensori.
+2. Fare una query per un asse specificando il range temporale in modo da includere il picco (qualche secondo o meno).
+3. Eseguire lo script con il seguente segmento di codice non commentato:
+    ```python
+  	r = delay_finder(s1,s2,250)
+ 	r_pk = delay_finder_pk(s1,s2,250)
+ 	print("Delay_xcorr: ", r, " s")
+	print("Delay_peaks: ", r_pk, " s")
+    ```
+ 4. Memorizzare i due valori restituiti dalla stampa a video dei due metodi.
+ 5. Ripetere i punti 2. e 3. per conferma anche per gli altri assi
 
-### Tests
+Ora è possibile quindi effettuare qualsiasi query modificando nella seguente riga il valore restituito dalla procedura sopra.
 
-To execute tests, run:
-
-```sh
-> INSERT-TEST-COMMANDS
-```
-
+ ```python
+ delay = timedelta(milliseconds = 8)
+ ```
+    
 ---
 
-## Project Roadmap
-
-- [X] `► INSERT-TASK-1`
-- [ ] `► INSERT-TASK-2`
-- [ ] `► ...`
-
----
-
-## Contributing
-
-Contributions are welcome! Here are several ways you can contribute:
-
-- **[Submit Pull Requests](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/CONTRIBUTING.md)**: Review open PRs, and submit your own PRs.
-- **[Join the Discussions](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/discussions)**: Share your insights, provide feedback, or ask questions.
-- **[Report Issues](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/issues)**: Submit bugs found or log feature requests for Mqtt-mseed2influxdb.
-
-<details closed>
-    <summary>Contributing Guidelines</summary>
-
-1. **Fork the Repository**: Start by forking the project repository to your GitHub account.
-2. **Clone Locally**: Clone the forked repository to your local machine using a Git client.
-   ```sh
-   git clone https://github.com/dennisrapaccini/mqtt-mseed2influxdb
-   ```
-3. **Create a New Branch**: Always work on a new branch, giving it a descriptive name.
-   ```sh
-   git checkout -b new-feature-x
-   ```
-4. **Make Your Changes**: Develop and test your changes locally.
-5. **Commit Your Changes**: Commit with a clear message describing your updates.
-   ```sh
-   git commit -m 'Implemented new feature x.'
-   ```
-6. **Push to GitHub**: Push the changes to your forked repository.
-   ```sh
-   git push origin new-feature-x
-   ```
-7. **Submit a Pull Request**: Create a PR against the original project repository. Clearly describe the changes and their motivations.
-
-Once your PR is reviewed and approved, it will be merged into the main branch.
-
-</details>
-
----
-
-##  Acknowledgments <a name="bib"></a>
+##  Bibliografia <a name="bib"></a>
 
 - [1] Analizzatore software per il formato miniSEED - Sandro Rao - INGV. https://istituto.ingv.it/images/collane-editoriali/rapporti%20tecnici/rapporti-tecnici-2014/rapporto285.pdf <a name="ref1"></a> 
 - [2] Get started with InfluxDB - InfluxDB official website. https://docs.influxdata.com/influxdb/v2/get-started/ <a name="ref2"></a>
