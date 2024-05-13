@@ -30,8 +30,8 @@
 > - [Modules](#moduli)
 > - [Diagramma logico](#diagramma)
 > - [Come iniziare](#come)
->   - [ Installazione manuale](#installazione-manuale)
->   - [ Installazione mediante Docker](#-installazione-mediante-docker-(consigliata))
+>   - [ Installazione manuale](#manuale)
+>   - [ Installazione mediante Docker](#docker)
 >   - [ Running mqtt-mseed2influxdb](#-running-mqtt-mseed2influxdb)
 >   - [ Tests](#-tests)
 > - [ Project Roadmap](#-project-roadmap)
@@ -78,7 +78,7 @@
 
 ---
 
-##  Modules
+##  Modules <a name="moduli"></a>
 
 <details closed><summary>.</summary>
 
@@ -126,9 +126,8 @@
 
 </details>
 
-<a name="moduli"/>
 ---
-## Diagramma logico 
+## Diagramma logico <a name="diagramma"></a>
 
 Di seguito una rappresentazione di massima del flusso logico del proxy:
 
@@ -152,9 +151,9 @@ graph TD;
 
 
 ```
-<a name="diagramma"/>
+
 ---
-## Come iniziare
+## Come iniziare <a name="come"></a>
 L'installazione può essere eseguita secondo due approcci: manualmente o mediante l'utilizzo di Docker-Compose. Si raccomanda di adottare il secondo per una maggiore semplicità e coerenza nell'ambiente di esecuzione.
 
 > [!NOTE]
@@ -174,8 +173,7 @@ Se si procede con __docker__:
   - Git
   - Docker e Docker Compose (automaticamente installati con Docker Desktop)
 
-<a name="come"/>
-### Installazione manuale
+### Installazione manuale <a name="manuale"></a>
 1. Clonare la repository:
    
 	```sh
@@ -204,7 +202,7 @@ Se si procede con __docker__:
 	```
     Analogamente al precedente, per altri sistemi, fare riferimento alla [documentazione](https://grafana.com/docs/grafana/latest/setup-grafana/installation/) ufficiale.
 
-### Installazione mediante Docker (consigliata)
+### Installazione mediante Docker (consigliata) <a name="docker"></a>
 1. Clonare la repository:
    
 	```sh
@@ -216,7 +214,7 @@ Se si procede con __docker__:
 	```sh
 	$ docker-compose up -d influxdb grafana
 	```
-## Configurazione
+## Configurazione <a name="configurazione"></a>
 Prima di avviare l'applicazione, è necessario configurare il _broker MQTT_, _InfluxDB_, _Grafana_ e il _proxy_ modificando i file [.env](.env) e [config.ini](config.ini). 
 
 #### Broker MQTT 
@@ -288,7 +286,7 @@ La configurazione si ritiene completa dopo aver visitato [http://localhost:3000/
    
 
 
-### Uso
+### Uso <a name="uso"></a>
 #### Scrittura dei pacchetti MSEED su InfluxDB
 Il processing e la _scrittura_ su InfluxDB dei valori di accelerazione e di temperatura provenienti dai sensori viene gestita ed effettuata da [proxy_unified.py](src/proxy_unified.py).\
 \
