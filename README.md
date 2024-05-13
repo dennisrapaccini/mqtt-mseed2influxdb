@@ -27,7 +27,7 @@
 
 > - [Introduzione](#intro)
 > - [Struttura del progetto](#struttura)
-> - [Modules](#moduli)
+> - [Moduli](#moduli)
 > - [Diagramma logico](#diagramma)
 >   - [Struttura dei sensori e del database](#struttura2)
 > - [Come iniziare](#come)
@@ -51,7 +51,7 @@
 
 Questa applicazione è stata progettata per ricevere dati da vari sensori sismici (o per monitoraggio strutturale) (accelerazione e temperatura) tramite il protocollo _MQTT_ e scriverli in un database per serie temporali (_InfluxDB_). I dati ricevuti dal _broker MQTT_ sono pacchetti di bytes in formato _MSEED_.\
 Viene fornito anche uno script che effettua queries al database e le salva in _CSV_, allineando temporalmente i valori forniti dai sensori (non sincronizzati). \
-Oltre agli script Python, è stata caricata una dashboard Grafana specifica per questo progetto. La dashboard contiene diverse visualizzazioni grafiche (anche in real-time) dei dati ricevuti e scritti in InfluxDB. 
+Oltre agli script Python, è stata caricata una dashboard _Grafana_ specifica per questo progetto. La dashboard contiene diverse visualizzazioni grafiche (anche in real-time) dei dati ricevuti e scritti in _InfluxDB_. 
 
 #### MSEED 
 Il formato _miniSEED_ è un sottoinsieme del più articolato formato _SEED_ (Standard for the Exchange of Earthquake Data), che nasce con lo scopo di standardizzare lo scambio di dati, relativi al campo sismologico, tra le varie comunità scientifiche. \
