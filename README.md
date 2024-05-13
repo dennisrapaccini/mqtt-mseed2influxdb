@@ -26,10 +26,10 @@
 ##  Links
 
 > - [Sommario](#sommario)
-> - [Features](#features)
-> - [Struttura del progetto](#struttura-del-progetto)
-> - [Modules](#modules)
-> - [Come iniziare](#come-iniziare)
+> - [Struttura del progetto](#struttura)
+> - [Modules](#moduli)
+> - [Diagramma logico](#diagramma)
+> - [Come iniziare](#come)
 >   - [ Installazione manuale](#installazione-manuale)
 >   - [ Installazione mediante Docker](#-installazione-mediante-docker-(consigliata))
 >   - [ Running mqtt-mseed2influxdb](#-running-mqtt-mseed2influxdb)
@@ -41,19 +41,13 @@
 
 ---
 
-## Sommario
+## Sommario <a name="sommario"></a>
 
 <code>► INSERT-TEXT-HERE</code>
 
 ---
 
-## Features
-
-<code>► INSERT-TEXT-HERE</code>
-
----
-
-## Struttura del progetto
+## Struttura del progetto <a name="struttura"></a>
 
 ```sh
 └── mqtt-mseed2influxdb/
@@ -80,6 +74,8 @@
         ├── query.csv
         └── query.py
 ```
+
+
 ---
 
 ##  Modules
@@ -130,8 +126,34 @@
 
 </details>
 
+<a name="moduli"/>
 ---
+## Diagramma logico 
 
+Di seguito una rappresentazione di massima del flusso logico del proxy:
+
+```mermaid
+graph TD;
+
+    A[Start] --> B[Read and set Configuration and Environment Variables]
+    B --> C[Create InfluxDB Client]
+    C --> D[Connect to MQTT Broker]
+    D --> E{Connected?}
+    E -->|Yes| F[Subscribe to MQTT Topic]
+    E -->|No| D
+    F --> G[Connect to MQTT Broker]
+    G --> H[/Message received from sensor_id/]
+    H --> I[Extract data from MQTT payload]
+    I --> J{Sensor_id in list of <br> allowed sensors?}
+    J --> |Yes| K[Read MSEED bytes data]
+    J --> |No| H
+    K --> L[Create InfluxDB Points using MSEED header and data]
+    L --> M[(InfluxDB bucket)]
+
+
+```
+<a name="diagramma"/>
+---
 ## Come iniziare
 L'installazione può essere eseguita secondo due approcci: manualmente o mediante l'utilizzo di Docker-Compose. Si raccomanda di adottare il secondo per una maggiore semplicità e coerenza nell'ambiente di esecuzione.
 
@@ -152,6 +174,7 @@ Se si procede con __docker__:
   - Git
   - Docker e Docker Compose (automaticamente installati con Docker Desktop)
 
+<a name="come"/>
 ### Installazione manuale
 1. Clonare la repository:
    
