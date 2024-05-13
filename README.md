@@ -25,7 +25,7 @@
 
 ##  Links
 
-> - [Sommario](#sommario)
+> - [Introduzione](#intro)
 > - [Struttura del progetto](#struttura)
 > - [Modules](#moduli)
 > - [Diagramma logico](#diagramma)
@@ -36,18 +36,38 @@
 >   - [ Tests](#-tests)
 > - [ Project Roadmap](#-project-roadmap)
 > - [ Contributing](#-contributing)
-> - [ License](#-license)
-> - [ Acknowledgments](#-acknowledgments)
+> - [Bibliografia](#bib)
 
 ---
 
-## Sommario <a name="sommario"></a>
+## Introduzione <a name="sommario"></a>
 
-<code>► INSERT-TEXT-HERE</code>
+Questa applicazione è stata progettata per ricevere dati da vari sensori sismici (accelerazione e temperatura) tramite il protocollo _MQTT_ e scriverli in un database per serie temporali (_InfluxDB_). I dati ricevuti dal _broker MQTT_ sono pacchetti di bytes in formato _MSEED_.\
+Viene fornito anche uno script che effettua queries al database e le salva in _CSV_, allineando temporalmente i valori forniti dai sensori (non sincronizzati). \
+Oltre agli script Python, è stata caricata una dashboard Grafana specifica per questo progetto. La dashboard contiene diverse visualizzazioni grafiche (anche in real-time) dei dati ricevuti e scritti in InfluxDB. 
+#### MSEED 
+Il formato _miniSEED_ è un sottoinsieme del più articolato formato _SEED_ (Standard for the Exchange of Earthquake Data), che nasce con lo scopo di standardizzare lo scambio di dati, relativi al campo sismologico, tra le varie comunità scientifiche. \
+L’organizzazione del formato e la relativa chiave di lettura è racchiusa all’interno di particolari
+“blocchetti” generalmente di 8 bytes dove vengono riportate informazioni sui dati sismici o su come questi
+devono essere letti ed interpretati. Nel _miniSEED_ sono presenti solo due blocchetti denominati 1000 e 1001
+che costituiscono l’ultima parte di un _header_ fisso di 64 bytes, seguito dai campioni sismici costituenti il
+resto del “pacchetto” che è sempre dello stesso numero di bytes all’interno del medesimo streaming di dati. [[1]](#ref1)
+
+#### InfluxDB
+InfluxDB è una piattaforma creata appositamente per raccogliere, archiviare, elaborare e visualizzare serie temporali. Le serie temporali sono una sequenza di _data points_ indicizzati in ordine temporale. I _data points_ consistono tipicamente in misurazioni successive effettuate dalla stessa "sorgente".
+InfluxDB organizza le serie temporali in _buckets_ e _measurements_ (misure). Un _bucket_ può contenere più measurements. Le misure contengono più _tag_ e _fields_ (campi).
+- **Bucket**: Posizione in cui vengono memorizzati i dati delle serie temporali. Un bucket può contenere più measurements.
+- **Measurement**: Raggruppamento logico delle serie temporali. Tutti i punti di una determinata misurazione devono avere gli stessi tag. Una misura contiene più tag e campi.
+- **Tag:** Coppie chiave-valore con valori diversi (ma generalmente poco variabili). I tag sono destinati alla memorizzazione di metadati per ogni punto, ad esempio qualcosa che identifichi la fonte dei dati (es. stazione)
+- **Fields**: Coppie chiave-valore con valori che cambiano nel tempo, ad esempio: temperatura, accelerazione.
+- **Timestamp**: Timestamp associato al dato. Quando vengono memorizzati su disco e interrogati, tutti i dati sono ordinati temporalmente. [[2]](#ref2)
+- 
+#### Grafana
+Grafana è un'applicazione web open-source per la visualizzazione di database per serie temporali (_InfluxDB, Graphite, Prometheus, OpenTSDB_), logging databases e per documenti (_Loki, Elasticsearch, Splunk, MongoDB_), database SQL (_MySQL, PostgreSQL, Redshift_),cloud metric databases (_AWS CloudWatch, GCP Monitoring, Azure Monitor_) e altre datasources. [[3]](#ref3)
 
 ---
 
-## Struttura del progetto <a name="struttura"></a>
+## Struttura del progetto <a name="intro"></a>
 
 ```sh
 └── mqtt-mseed2influxdb/
@@ -55,7 +75,19 @@
     ├── Dockerfile-query
     ├── README.md
     ├── config.ini
+    ├── cross_corr.png
     ├── docker-compose.yml
+    ├── docs
+    │   └── images
+    │       ├── image1.png
+    │       ├── image2.png
+    │       ├── image3.png
+    │       ├── image4.png
+    │       ├── image5.png
+    │       ├── image6.png
+    │       ├── image7.png
+    │       ├── image8.png
+    │       └── image9.png
     ├── grafana-provisioning
     │   ├── dashboards
     │   │   ├── dashboard.yaml
@@ -64,10 +96,12 @@
     │       └── datasource.yaml
     ├── requirements.txt
     └── src
+        ├── .png
         ├── certs
         │   ├── ca.crt
         │   ├── client.crt
         │   └── client.key
+        ├── correlation.png
         ├── logs
         │   └── errors.log
         ├── proxy_unified.py
@@ -78,16 +112,17 @@
 
 ---
 
-##  Modules <a name="moduli"></a>
+##  Moduli <a name="moduli"></a>
 
 <details closed><summary>.</summary>
 
 | File                                                                                                        | Summary                         |
 | ---                                                                                                         | ---                             |
-| [docker-compose.yml](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/docker-compose.yml) | <code>► INSERT-TEXT-HERE</code> |
-| [Dockerfile-proxy](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/Dockerfile-proxy)     | <code>► INSERT-TEXT-HERE</code> |
-| [Dockerfile-query](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/Dockerfile-query)     | <code>► INSERT-TEXT-HERE</code> |
-| [requirements.txt](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/requirements.txt)     | <code>► INSERT-TEXT-HERE</code> |
+| [docker-compose.yml](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/docker-compose.yml)   | File di configurazione per i diversi Docker container |
+| [Dockerfile-proxy](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/Dockerfile-proxy)     | Dockerfile per lo script "proxy" |
+| [Dockerfile-query](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/Dockerfile-query)     | Dockerfile per lo script "query" |
+| [requirements.txt](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/requirements.txt)     | File contenente tutte le dipendenze di Python |
+| [config.txt](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/config.ini)     | File di configurazione per la scrittura |
 
 </details>
 
@@ -95,7 +130,7 @@
 
 | File                                                                                                                                   | Summary                         |
 | ---                                                                                                                                    | ---                             |
-| [datasource.yaml](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/grafana-provisioning/datasources/datasource.yaml) | <code>► INSERT-TEXT-HERE</code> |
+| [datasource.yaml](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/grafana-provisioning/datasources/datasource.yaml) | File di configurazione per il container di Grafana |
 
 </details>
 
@@ -103,8 +138,8 @@
 
 | File                                                                                                                                | Summary                         |
 | ---                                                                                                                                 | ---                             |
-| [seismic.json](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/grafana-provisioning/dashboards/seismic.json)     | <code>► INSERT-TEXT-HERE</code> |
-| [dashboard.yaml](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/grafana-provisioning/dashboards/dashboard.yaml) | <code>► INSERT-TEXT-HERE</code> |
+| [seismic.json](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/grafana-provisioning/dashboards/seismic.json)     | File JSON che descrive la dashboard Grafana creata per questo progetto |
+| [dashboard.yaml](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/grafana-provisioning/dashboards/dashboard.yaml) | File di configurazione della dashboard per il container di Grafana |
 
 </details>
 
@@ -112,8 +147,8 @@
 
 | File                                                                                                        | Summary                         |
 | ---                                                                                                         | ---                             |
-| [query.py](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/src/query.py)                 | <code>► INSERT-TEXT-HERE</code> |
-| [proxy_unified.py](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/src/proxy_unified.py) | <code>► INSERT-TEXT-HERE</code> |
+| [query.py](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/src/query.py)                 | Script Python per effettuare queries|
+| [proxy_unified.py](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/src/proxy_unified.py) | Script Python per scrivere su InfluxDB |
 
 </details>
 
@@ -121,8 +156,9 @@
 
 | File                                                                                                  | Summary                         |
 | ---                                                                                                   | ---                             |
-| [ca.crt](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/src/certs/ca.crt)         | <code>► INSERT-TEXT-HERE</code> |
-| [client.crt](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/master/src/certs/client.crt) | <code>► INSERT-TEXT-HERE</code> |
+| [ca.crt](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/src/certs/ca.crt)         | Certificato per TLS |
+| [client.crt](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/src/certs/client.crt) | Certificato per TLS|
+| [client.key](https://github.com/dennisrapaccini/mqtt-mseed2influxdb/blob/main/src/certs/client.key) | Chiave per TLS|
 
 </details>
 
@@ -334,7 +370,7 @@ Se, dopo aver switchato su **View raw data** e aver fatto **SUBMIT**, non vengon
 <img src="docs/images/image6.png" alt="drawing" width="200"/>
 
 #### Visualizzazione dei dati con Grafana
-Accedendo all'interfaccia grafica si può visualizzare l'andamento temporale (in quasi-realtime) dei valori misurati dai sensori. E' stata infatti creata una dashboard (accessibile dalla sezione **Dashboards**) chiamata _Seismic Monitoring_ ad hoc per questo progetto. Essa contiene una moltitudine di plot ordinati e raggruppati per i diversi sensori, come nelle seguenti figure.
+Accedendo all'interfaccia grafica si può visualizzare l'andamento temporale (in quasi-realtime) dei valori misurati dai sensori. E' stata infatti creata una dashboard (accessibile dalla sezione **Dashboards**) chiamata _Seismic Monitoring_ ad hoc per questo progetto. Essa contiene una moltitudine di plot ordinati e raggruppati per i diversi sensori, come nelle seguenti figure. Si è scelto di riportare i valori graficati in _g_, ossia in multipli dell'accelerazione di gravità.
 
 <img src="docs/images/image7.png" alt="drawing" width="800"/>
 
@@ -396,16 +432,9 @@ Once your PR is reviewed and approved, it will be merged into the main branch.
 
 ---
 
-##  License
+##  Acknowledgments <a name="bib"></a>
 
-This project is protected under the [SELECT-A-LICENSE](https://choosealicense.com/licenses) License. For more details, refer to the [LICENSE](https://choosealicense.com/licenses/) file.
-
----
-
-##  Acknowledgments
-
-- List any resources, contributors, inspiration, etc. here.
-
-[**Return**](#-quick-links)
-
+- [1] Analizzatore software per il formato miniSEED - Sandro Rao - INGV. https://istituto.ingv.it/images/collane-editoriali/rapporti%20tecnici/rapporti-tecnici-2014/rapporto285.pdf <a name="ref1"></a> 
+- [2] Get started with InfluxDB - InfluxDB official website. https://docs.influxdata.com/influxdb/v2/get-started/ <a name="ref2"></a>
+- [3] Questions tagged [grafana] - Stack Overflow. https://stackoverflow.com/questions/tagged/grafana <a name="ref3"></a>
 ---
