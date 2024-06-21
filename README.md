@@ -3,8 +3,7 @@
 </p>
 <p align="center">
     <em> Applicazione/Proxy Python che scrive pacchetti MSEED da MQTT su InfluxDB per la gestione e l'analisi di dati sismici.</em><br>
-    <em> Progetto di Wireless Sensor Networks for IoT - UNIVPM </em>
-	
+    
 </p>
 <p align="center">
 	<img src="https://img.shields.io/github/license/dennisrapaccini/mqtt-mseed2influxdb?style=flat&color=0080ff" alt="license">
