@@ -1,0 +1,16 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    jsonData:
+      httpHeaderName1: Authorization
+    secureJsonData:
+      httpHeaderValue1: Token $TOKEN
+
+    access: proxy
+    database: ${BUCKET}
+    url: http://172.17.0.1:8086
+    isDefault: true
+    editable: true
+

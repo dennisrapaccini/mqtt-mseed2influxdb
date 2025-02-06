@@ -1,0 +1,7 @@
+obspy
+paho-mqtt
+scipy
+numpy
+scipy
+python-dotenv
+influxdb-client

@@ -1,0 +1,68 @@
+# networks:
+#   influxdb_network:
+#     driver: bridge
+    
+services:
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    restart: unless-stopped
+    # networks:
+    #   - influxdb_network
+    ports:
+      - "8086:8086"
+    # security_opt:
+    #   - no-new-privileges:true 
+    env_file:
+      - path: ./.env
+        required: true 
+    environment: 
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${BUCKET}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${TOKEN}
+    volumes:
+      - influxdb2-data:/var/lib/influxdb2
+      - influxdb2-config:/etc/influxdb2
+    
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana-provisioning/:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
+    
+  proxy:
+    container_name: mqtt-mseed2influxdb
+    command: python3 /app/src/proxy_unified.py
+    depends_on:
+      - influxdb
+    # networks:
+    #   - influxdb_network
+    volumes:
+      - .:/app
+    build:
+      context: .
+      dockerfile: Dockerfile-proxy
+    
+  query:
+    container_name: query
+    command: python3 /app/src/query.py
+    depends_on:
+      - influxdb
+    volumes:
+      - .:/app
+    build:
+      context: .
+      dockerfile: Dockerfile-query
+
+volumes:
+  influxdb2-data:
+  influxdb2-config:
+  grafana-storage:
